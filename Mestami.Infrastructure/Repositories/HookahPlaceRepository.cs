@@ -52,18 +52,20 @@ namespace Mestami.Infrastructure.Repositories
 
         public async Task AddLoungeBar(CreateNewLoungeBarRequest loungeBar)
         {
-            //var dp = new DynamicParameters();
-            //dp.Add("@address", entity.Address, DbType.String);
-            //dp.Add("@cityId", 1, DbType.String);
-            //dp.Add("@metro_stations_id", entity.metro, DbType.String);
-            //dp.Add("@is_vip_room", city ?? "", DbType.String);
-            //dp.Add("@vip_room_pricing", city ?? "", DbType.String);
-            //dp.Add("@pros", title ?? "", DbType.String);
-            //dp.Add("@cons", address ?? "", DbType.String);
-            //dp.Add("@title", metroStation ?? "", DbType.String);
-
+            var dp = new DynamicParameters();
+            dp.Add("@address", loungeBar.Address, DbType.String);
+            dp.Add("@cityId", 1, DbType.Int32);    // TODO: Add new cities
+            dp.Add("@vipRoomInfo", loungeBar.VipRoomInfo, DbType.String);
+            dp.Add("@pros", loungeBar.Pros, DbType.String);
+            dp.Add("@cons", loungeBar.Cons, DbType.String);
+            dp.Add("@hookahQuality", Convert.ToInt16(loungeBar.Quality), DbType.Int16);
+            dp.Add("@title", loungeBar.Title, DbType.String);
+            dp.Add("@approxPrice", loungeBar.ApproxPrice, DbType.String);
+            dp.Add("@placeTypeId", 1, DbType.Int32);
+            dp.Add("@isTest", loungeBar.IsTest, DbType.Boolean);
+             
             var connection = await _dbConnectionFactory.CreateConnection();
-            var loungeBars = await connection.QueryAsync<LoungeBar>(LoungeBarQueries.GetByFilter);
+            await connection.ExecuteAsync(LoungeBarQueries.AddNewPlace, dp);
         }
 
         public Task<bool> DeleteByIdAsync(int id)

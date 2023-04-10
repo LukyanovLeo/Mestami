@@ -56,7 +56,7 @@ namespace Mestami.Controllers
 
         [HttpPost]
         [Route("new")]
-        public async Task CreateNewLoungeBar([FromBody] CreateNewLoungeBarRequest request)
+        public async Task CreateNewLoungeBar(CreateNewLoungeBarRequest request)
         {
             await _loungeBarRepository.AddLoungeBar(request);
         }
